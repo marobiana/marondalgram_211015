@@ -12,4 +12,9 @@ public class TestController {
 	public String test() {
 		return "Hello world";
 	}
+	
+	@RequestMapping("/quiz_jsp_test")
+	public String quizJspTest() {
+		return "test/quiz_test";
+	}
 }
