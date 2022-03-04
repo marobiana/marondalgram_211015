@@ -49,6 +49,11 @@ public class ContentBO {
 			List<CommentView> commentList = commentBO.generateCommentViewListByPostId(post.getId());
 			content.setCommentList(commentList);
 			
+			// 좋아요 개수 세팅
+			
+			// 로그인 된 사용자의 좋아요 여부 세팅
+			
+			
 			contentViewList.add(content);
 		}
 		

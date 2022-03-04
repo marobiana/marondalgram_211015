@@ -39,6 +39,13 @@
 					<%-- 글쓴이 아이디 및 ... 버튼(삭제) : 이 둘을 한 행에 멀리 떨어뜨려 나타내기 위해 d-flex, between --%>
 					<div class="p-2 d-flex justify-content-between">
 						<span class="font-weight-bold">${content.user.name}</span>
+						
+						<%-- 글쓴 사용자와 로그인 사용자가 일치할 때만 삭제 가능 --%>
+						<c:if test="${userName eq content.user.name}">
+							<a href="#" class="more-btn" data-toggle="modal" data-target="#moreModal" data-post-id="${content.post.id}">
+								<img src="https://www.iconninja.com/files/860/824/939/more-icon.png" width="30">
+							</a>
+						</c:if>
 					</div>
 					
 					<%-- 카드 이미지 --%>
@@ -92,8 +99,8 @@
 					<%-- 로그인 된 상태에서만 쓸 수 있다. --%>
 					<c:if test="${not empty userId}">
 						<div class="comment-write d-flex border-top mt-2">
-							<input type="text" id="commentText${post.id}" class="form-control border-0 mr-2" placeholder="댓글 달기"/> 
-							<button type="button" class="commentBtn btn btn-light" data-post-id="${post.id}">게시</button>
+							<input type="text" id="commentText${content.post.id}" class="form-control border-0 mr-2" placeholder="댓글 달기"/> 
+							<button type="button" class="commentBtn btn btn-light" data-post-id="${content.post.id}">게시</button>
 						</div>
 					</c:if>
 				</div>
@@ -101,6 +108,25 @@
 		</div>
 	</div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="moreModal">
+	<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+		<div class="modal-content">
+      		<%-- modal 창 안에 내용 넣기 --%>
+      		<div>
+      			<div class="my-3 text-center">
+      				<a href="#" class="del-post d-block">삭제하기</a>
+      			</div>
+      			<div class="border-top py-3 text-center">
+					<%-- data-dismiss: 모달창 닫힘 --%>
+					<a href="#" class="cancel d-block" data-dismiss="modal">취소</a> <%-- 클릭할 수 있는 영역을 넓히기 위해 d-block --%>
+				</div>
+      		</div>
+		</div>
+	</div>
+</div>
+
 
 <script>
 $(document).ready(function() {
@@ -187,6 +213,7 @@ $(document).ready(function() {
 		
 		// commentText2
 		let commentContent = $('#commentText' + postId).val().trim();
+		// let commentContent = $(this).siblings('input').val().trim();
 		//alert(commentContent);
 		
 		if (commentContent == '') {
@@ -208,6 +235,26 @@ $(document).ready(function() {
 				alert(errorMsg + ":" + textStatus);
 			}
 		});
+	});
+	
+	// 카드에서 더보기(...) 클릭시 모달에 삭제될 글 번호를 넣어준다.
+	$('.more-btn').on('click', function(e) {
+		e.preventDefault();
+		
+		let postId = $(this).data('post-id');
+		//alert(postId);
+		
+		$('#moreModal').data('post-id', postId);  // data-post-id="1"
+	});
+	
+	// 모달창 안에 있는 삭제하기 버튼 클릭
+	$('#moreModal .del-post').on('click', function(e) {
+		e.preventDefault();
+		
+		let postId = $('#moreModal').data('post-id');
+		alert(postId);
+		
+		// 삭제 AJAX
 	});
 	
 });

@@ -13,6 +13,7 @@
 			,`updatedAt`
 		FROM
 			`post`
+		ORDER BY `id` DESC
 	</select>
 	
 	<insert id="insertPost" parameterType="map">
