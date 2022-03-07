@@ -72,7 +72,7 @@ public class PostRestController {
 			return result;
 		}
 		
-		//postBO.
+		postBO.deletePostByPostIdAndUserId(postId, userId);
 		result.put("result", "success");
 		
 		return result;

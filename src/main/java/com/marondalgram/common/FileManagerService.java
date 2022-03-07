@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class FileManagerService {
 
-	public final static String FILE_UPLOAD_PATH = "D:\\신보람\\web_211015\\6_spring-project\\sns\\workspace\\images/";
+	public final static String FILE_UPLOAD_PATH = "D:\\신보람\\신보람_211015\\6_spring_project\\sns\\workspace/images/";
 	
 	public String saveFile(String userLoginId, MultipartFile file) {
 		// 파일 디렉토리 경로 예: marobiana_16456453342/sun.png
@@ -41,5 +41,20 @@ public class FileManagerService {
 		}
 		
 		return null;
+	}
+	
+	public void deleteFile(String imagePath) throws IOException {
+		// imagePath의 /images/marobiana_16456453342/sun.png 에서 /images/ 를 제거한 path를 실제 저장경로 뒤에 붙인다.
+		// D:\\신보람\\web_211015\\6_spring-project\\memo\\workspace\\images/         /images/marobiana_16456453342/sun.png
+		Path path = Paths.get(FILE_UPLOAD_PATH + imagePath.replace("/images/", ""));
+		if (Files.exists(path)) { // 이미지 파일이 있으면 삭제
+			Files.delete(path);
+		}
+		
+		// 디렉토리(폴더) 삭제
+		path = path.getParent();
+		if (Files.exists(path)) {
+			Files.delete(path);
+		}
 	}
 }

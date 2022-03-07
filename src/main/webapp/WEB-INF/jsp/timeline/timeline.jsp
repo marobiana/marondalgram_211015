@@ -87,9 +87,11 @@
 									<span>${commentView.comment.content}</span>
 									
 									<%-- 댓글쓴이가 본인이면 삭제버튼 노출 --%>
-										<a href="#" class="commentDelBtn" data-comment-id="${comment.id}">
+									<c:if test="${commentView.user.id eq userId}">
+										<a href="#" class="commentDelBtn" data-comment-id="${commentView.comment.id}">
 											<img src="https://www.iconninja.com/files/603/22/506/x-icon.png" width="10px" height="10px">
 										</a>
+									</c:if>
 								</div>
 							</c:forEach>
 						</div>
@@ -247,16 +249,54 @@ $(document).ready(function() {
 		$('#moreModal').data('post-id', postId);  // data-post-id="1"
 	});
 	
-	// 모달창 안에 있는 삭제하기 버튼 클릭
+	// 모달창 안에 있는 글 삭제하기 버튼 클릭
 	$('#moreModal .del-post').on('click', function(e) {
 		e.preventDefault();
 		
 		let postId = $('#moreModal').data('post-id');
-		alert(postId);
+		//alert(postId);
 		
 		// 삭제 AJAX
+		$.ajax({
+			type:"delete"
+			, url:"/post/delete"
+			, data: {"postId":postId}
+			, success: function(data) {
+				if (data.result == "success") {
+					location.reload();
+				} else {
+					alert(data.errorMessage);
+				}
+			}
+			, error: function(e) {
+				alert("삭제하는데 실패했습니다. 관리자에게 문의해주세요.");
+			}
+		});
 	});
 	
+	// 댓글 삭제
+	$('.commentDelBtn').on('click', function(e) {
+		e.preventDefault(); // a 기본 동작 중단
+		
+		let commentId = $(this).data('comment-id');
+		//alert(commentId);
+		
+		$.ajax({
+			type:"delete"
+			, url:"/comment/delete"
+			, data:{"commentId":commentId}
+			, success:function(data) {
+				if (data.result == "success") {
+					location.reload();
+				} else {
+					alert(data.errorMessage);
+				}
+			}
+			, error:function(e) {
+				alert("댓글 삭제가 실패했습니다. 관리자에게 문의해주세요.");
+			}
+		});
+	});
 });
 </script>
 
