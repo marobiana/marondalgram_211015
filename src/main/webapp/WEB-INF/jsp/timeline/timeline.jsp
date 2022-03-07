@@ -56,12 +56,18 @@
 					
 					<%-- 좋아요 --%>
 					<div class="card-like m-3">
-						<a href="#" class="like-btn">
+						<a href="#" class="like-btn" data-post-id="${content.post.id}">
 							<%-- 좋아요 해제 상태 --%>
+							<c:if test="${content.filledLike eq false}">
+								<img src="https://www.iconninja.com/files/214/518/441/heart-icon.png" width="18px" height="18px" alt="empty heart">
+							</c:if>
 							<%-- 좋아요 상태 --%>
-								<img src="https://www.iconninja.com/files/527/809/128/heart-icon.png" width="18px" height="18px">
+							<c:if test="${content.filledLike eq true}">
+								<img src="https://www.iconninja.com/files/527/809/128/heart-icon.png" width="18px" height="18px" alt="filled heart">
+							</c:if>
+						
+						좋아요 ${content.likeCount}개
 						</a>
-						<a href="#">좋아요 100개</a>
 					</div>
 					
 					<%-- 글(Post) --%>
@@ -294,6 +300,28 @@ $(document).ready(function() {
 			}
 			, error:function(e) {
 				alert("댓글 삭제가 실패했습니다. 관리자에게 문의해주세요.");
+			}
+		});
+	});
+	
+	// 좋아요/해제 - 하트 버튼 클릭
+	$('.like-btn').on('click', function(e) {
+		e.preventDefault(); // a 태그 동작 중단
+		
+		let postId = $(this).data('post-id');
+		//alert(postId);
+		
+		$.ajax({
+			url: "/like/" + postId
+			,success: function(data) {
+				if (data.result == "success") {
+					location.reload();
+				} else {
+					alert(result.errorMessage);
+				}
+			}
+			,error: function(e) {
+				alert("좋아요가 실패했습니다. 관리자에게 문의해주세요.");
 			}
 		});
 	});

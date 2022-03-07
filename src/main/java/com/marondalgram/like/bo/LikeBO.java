@@ -28,6 +28,10 @@ public class LikeBO {
 		return count > 0? true : false;
 	}
 	
+	public int getLikeCountByPostId(int postId) {
+		return likeDAO.selectLikeCountByPostId(postId);
+	}
+	
 	public void deleteLikeByPostId(int postId) {
 		likeDAO.deleteLikeByPostId(postId);
 	}
